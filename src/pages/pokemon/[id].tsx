@@ -1,8 +1,9 @@
-
+import { useEffect, useState } from "react";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next"
 import { Layout } from "@/components/layouts";
 import { pokeApi } from "@/api"
 import { PokemonFull } from "@/interfaces";
+import { saveFavorites } from '@/utils';
 import { Button, Card, Container, Grid, Image, Text } from "@nextui-org/react";
 
 interface Props {
@@ -11,8 +12,20 @@ interface Props {
 
 const PokemonPage: NextPage<Props> = ({ pokemon }) => {
 
+  const [exist, setExist] = useState(false)
+
+  useEffect(() => {
+    setExist(JSON.parse(localStorage.getItem('pokemons') || '[]').includes(pokemon.id))
+  }, []);
+
+  const handleClick = () => {
+    saveFavorites(pokemon.id)
+    localStorage.setItem('pokemon', JSON.stringify(pokemon));
+    setExist(!exist)
+  }
+
   return (
-    <Layout>
+    <Layout title={pokemon.name}>
       <Grid.Container css={{ marginTop: '5px' }} gap={2}>
         <Grid xs={12} sm={4}>
           <Card isHoverable css={{ padding: '30px' }}>
@@ -31,8 +44,16 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
           <Card>
             <Card.Header css={{ display: 'flex', justifyContent: 'space-between' }}>
               <Text h1 transform="capitalize">{pokemon.name}</Text>
-              <Button color='gradient' ghost>
-                Guardar en Favoritos
+              <Button
+                color='gradient'
+                ghost={!exist}
+                onClick={handleClick}
+              >
+                {exist ? (
+                  <>Borrar de Favoritos</>
+                  ) : (
+                  <>Guardar en Favoritos</>
+                )}
               </Button>
             </Card.Header>
 

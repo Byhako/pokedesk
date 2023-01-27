@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { useTheme, Text, Spacer } from '@nextui-org/react'
 import styles from '@/styles/navbar.module.css'
 
@@ -13,11 +14,15 @@ export const Navbar = () => {
         width={40}
         height={40}
       />
-      <Text color='white' h2 css={{ marginLeft: '15px' }}>P</Text>
-      <Text color='white' h3>okemon</Text>
+      <Link href='/' style={{ display: 'flex' }}>
+        <Text color='white' h2 css={{ marginLeft: '15px' }}>P</Text>
+        <Text color='white' h3>okemon</Text>
+      </Link>
 
       <Spacer css={{ flex: 1 }} />
-      <Text color='white'>Favoritos</Text>
+      <Link href='/favorites'>
+        <Text color='white'>Favoritos</Text>
+      </Link>
 
     </nav>
   )
